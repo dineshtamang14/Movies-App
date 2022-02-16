@@ -1,17 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, Dimensions } from 'react-native';
+import { View, StyleSheet, Dimensions} from 'react-native'
 import { getPopularMovies, getUpcomingMovies } from '../services/services'
-import { SliderBox } from 'react-native-image-slider-box';
+import { SliderBox } from "react-native-image-slider-box";
 
 
 const dimensions = Dimensions.get('screen');
 const Home = () => {
     const [moviesImg, setMoviesImg] = useState([]);
     const [error, setError] = useState(false);
-  
+
     useEffect(() => {
         getUpcomingMovies().then(movies => {
-            setMoviesImg('https://image.tmdb.org/t/p/w500'+movies.poster_path);
+            const newMovies = [];
+            movies.forEach(movie => {
+                newMovies.push('https://image.tmdb.org/t/p/w500' + movie.poster_path);
+            });
+            setMoviesImg(newMovies);
         }).catch(err => {
             setError(err);
         })
