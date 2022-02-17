@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, Dimensions} from 'react-native'
+import { View, StyleSheet, Dimensions } from 'react-native'
 import { getPopularMovies, getUpcomingMovies } from '../services/services'
-import { SliderBox } from "react-native-image-slider-box";
+import { SliderBox } from 'react-native-image-slider-box'
+import List from '../components/List';
 
 
 const dimensions = Dimensions.get('screen');
 const Home = () => {
     const [moviesImg, setMoviesImg] = useState([]);
+    const [popularMovies, setPopularMovies] = useState('');
     const [error, setError] = useState(false);
 
     useEffect(() => {
@@ -21,24 +23,30 @@ const Home = () => {
         })
 
 
-    //   getPopularMovies().then(movies => {
-    //     setMovies(movies);
-    //   }).catch(err => {
-    //     setError(err);
-    //   })
+      getPopularMovies().then(movies => {
+        setPopularMovies(movies);
+      }).catch(err => {
+        setError(err);
+      })
 
     }, []);
 
     return (
-        <View style={styles.sliderContainer}>
-            <SliderBox 
-                images={moviesImg} 
-                autoplay={true} 
-                dotStyle={styles.sliderStyle}
-                circleLoop={true} 
-                sliderBoxHeight={dimensions.height / 1.5}
-            />
-        </View>
+        <React.Fragment>
+            <View style={styles.sliderContainer}>
+                <SliderBox 
+                    images={moviesImg} 
+                    autoplay={true} 
+                    dotStyle={styles.sliderStyle}
+                    circleLoop={true} 
+                    sliderBoxHeight={dimensions.height / 1.5}
+                />
+            </View>
+
+            <View style={styles.carousel}>
+                <List content={popularMovies} title="Popular Movies" />
+            </View>
+        </React.Fragment>
     );
 }
 
@@ -46,11 +54,16 @@ const styles = StyleSheet.create({
     sliderContainer: {
         flex: 1,
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
     },
 
     sliderStyle: {
         height: 0,
+    },
+    carousel: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
     }
 })
 
