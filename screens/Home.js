@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, Dimensions } from 'react-native'
-import { getPopularMovies, getUpcomingMovies } from '../services/services'
+import { View, StyleSheet, Dimensions, ScrollView } from 'react-native'
+import { getPopularMovies, getUpcomingMovies, getPopularTv, getFamilyMovies, getDocumentry } from '../services/services'
 import { SliderBox } from 'react-native-image-slider-box'
 import List from '../components/List';
 
@@ -9,30 +9,42 @@ const dimensions = Dimensions.get('screen');
 const Home = () => {
     const [moviesImg, setMoviesImg] = useState([]);
     const [popularMovies, setPopularMovies] = useState('');
+    const [popularTv, setPopularTv] = useState('');
+    const [familyMovies, setFamilyMovies] = useState('');
+    const [documentry, setDocumentry] = useState('');
     const [error, setError] = useState(false);
 
+    const getData = () => {
+        return Promise.all([
+            getUpcomingMovies(),
+            getPopularMovies(),
+            getPopularTv(),
+            getFamilyMovies(),
+            getDocumentry()
+        ])
+    }
+
     useEffect(() => {
-        getUpcomingMovies().then(movies => {
+
+        getData().then(([upcomingMovies, popularMovies, popularTv, familyMovies, documentry]) => {
             const newMovies = [];
-            movies.forEach(movie => {
+            upcomingMovies.forEach(movie => {
                 newMovies.push('https://image.tmdb.org/t/p/w500' + movie.poster_path);
             });
             setMoviesImg(newMovies);
+            setPopularMovies(popularMovies);
+            setPopularTv(popularTv);
+            setFamilyMovies(familyMovies);
+            setDocumentry(documentry);
         }).catch(err => {
             setError(err);
         })
-
-
-      getPopularMovies().then(movies => {
-        setPopularMovies(movies);
-      }).catch(err => {
-        setError(err);
-      })
 
     }, []);
 
     return (
         <React.Fragment>
+            <ScrollView>
             <View style={styles.sliderContainer}>
                 <SliderBox 
                     images={moviesImg} 
@@ -46,6 +58,19 @@ const Home = () => {
             <View style={styles.carousel}>
                 <List content={popularMovies} title="Popular Movies" />
             </View>
+
+            <View style={styles.carousel}>
+                <List content={popularTv} title="Popular TV Shows" />
+            </View>
+
+            <View style={styles.carousel}>
+                <List content={familyMovies} title="Family Movies" />
+            </View>
+
+            <View style={styles.carousel}>
+                <List content={documentry} title="Documentary" />
+            </View>
+            </ScrollView>
         </React.Fragment>
     );
 }
