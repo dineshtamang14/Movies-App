@@ -3,6 +3,7 @@ import { ActivityIndicator, View, StyleSheet, Dimensions, ScrollView } from 'rea
 import { getPopularMovies, getUpcomingMovies, getPopularTv, getFamilyMovies, getDocumentry } from '../services/services'
 import { SliderBox } from 'react-native-image-slider-box'
 import List from '../components/List';
+import Error from '../components/Error';
 
 
 const dimensions = Dimensions.get('screen');
@@ -37,8 +38,8 @@ const Home = () => {
             setPopularTv(popularTv);
             setFamilyMovies(familyMovies);
             setDocumentry(documentry);
-        }).catch(err => {
-            setError(err);
+        }).catch(() => {
+            setError(true);
         }).finally(() => {
             setLoaded(true);
         });
@@ -47,7 +48,7 @@ const Home = () => {
 
     return (
         <React.Fragment>
-            {loaded && (
+            {loaded && !error && (
                 <ScrollView>
                 {moviesImg && (
                 <View style={styles.sliderContainer}>
@@ -90,6 +91,7 @@ const Home = () => {
             {!loaded && (<View style={styles.activityIndicator}>
 			<ActivityIndicator size="large" color="#00ff00" />
       	</View>)}
+          {error && <Error errorText1="Oops! Something went wrong." errorText2="Make sure you are online and restart the App!" />}
         </React.Fragment>
     );
 }
