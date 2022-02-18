@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, Dimensions, ScrollView } from 'react-native'
+import { ActivityIndicator, View, StyleSheet, Dimensions, ScrollView } from 'react-native'
 import { getPopularMovies, getUpcomingMovies, getPopularTv, getFamilyMovies, getDocumentry } from '../services/services'
 import { SliderBox } from 'react-native-image-slider-box'
 import List from '../components/List';
@@ -7,12 +7,13 @@ import List from '../components/List';
 
 const dimensions = Dimensions.get('screen');
 const Home = () => {
-    const [moviesImg, setMoviesImg] = useState([]);
-    const [popularMovies, setPopularMovies] = useState('');
-    const [popularTv, setPopularTv] = useState('');
-    const [familyMovies, setFamilyMovies] = useState('');
-    const [documentry, setDocumentry] = useState('');
+    const [moviesImg, setMoviesImg] = useState();
+    const [popularMovies, setPopularMovies] = useState();
+    const [popularTv, setPopularTv] = useState();
+    const [familyMovies, setFamilyMovies] = useState();
+    const [documentry, setDocumentry] = useState();
     const [error, setError] = useState(false);
+    const [loaded, setLoaded] = useState(false);
 
     const getData = () => {
         return Promise.all([
@@ -38,14 +39,18 @@ const Home = () => {
             setDocumentry(documentry);
         }).catch(err => {
             setError(err);
-        })
+        }).finally(() => {
+            setLoaded(true);
+        });
 
     }, []);
 
     return (
         <React.Fragment>
-            <ScrollView>
-            <View style={styles.sliderContainer}>
+            {loaded && (
+                <ScrollView>
+                {moviesImg && (
+                <View style={styles.sliderContainer}>
                 <SliderBox 
                     images={moviesImg} 
                     autoplay={true} 
@@ -54,27 +59,41 @@ const Home = () => {
                     sliderBoxHeight={dimensions.height / 1.5}
                 />
             </View>
+            )}
 
-            <View style={styles.carousel}>
+            {popularMovies && (
+                <View style={styles.carousel}>
                 <List content={popularMovies} title="Popular Movies" />
             </View>
+            )}
 
-            <View style={styles.carousel}>
+            {popularTv && (
+                <View style={styles.carousel}>
                 <List content={popularTv} title="Popular TV Shows" />
             </View>
+            )}
 
-            <View style={styles.carousel}>
+            {familyMovies && (
+                <View style={styles.carousel}>
                 <List content={familyMovies} title="Family Movies" />
             </View>
+            )}
 
-            <View style={styles.carousel}>
+            {documentry && (
+                <View style={styles.carousel}>
                 <List content={documentry} title="Documentary" />
-            </View>
+            </View>                
+            )}
+
             </ScrollView>
+            )}
+            {!loaded && (<View style={styles.activityIndicator}>
+			<ActivityIndicator size="large" color="#00ff00" />
+      	</View>)}
         </React.Fragment>
     );
 }
-
+    
 const styles = StyleSheet.create({
     sliderContainer: {
         flex: 1,
@@ -89,6 +108,10 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
+    },
+    activityIndicator: {
+        flex: 1,
+        justifyContent: "center",
     }
 })
 
