@@ -1,11 +1,11 @@
 import React from 'react';
-import { View, StyleSheet, Dimensions, FlatList, Text} from 'react-native'
+import { View, StyleSheet, FlatList, Text} from 'react-native'
 import Card from './Card';
 import PropTypes from 'prop-types';
 
 const propTypes = {
     title: PropTypes.string,
-    content: PropTypes.object
+    content: PropTypes.array,
 };
 class List extends React.PureComponent {
     render() {
