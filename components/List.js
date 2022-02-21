@@ -9,7 +9,7 @@ const propTypes = {
 };
 class List extends React.PureComponent {
     render() {
-        const {title, content} = this.props
+        const {navigation, title, content} = this.props
         return (
             <View style={styles.list}>
                 <View>
@@ -20,7 +20,7 @@ class List extends React.PureComponent {
                 <FlatList
                     horizontal={true}
                     data={content}
-                    renderItem={({item}) => <Card item={item}/>}
+                    renderItem={({item}) => <Card navigation={navigation} item={item}/>}
                 >
                 </FlatList>
                 </View>
@@ -37,6 +37,7 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontWeight: 'bold',
         paddingBottom: 20,
+        color: 'black',
     }
 })
 

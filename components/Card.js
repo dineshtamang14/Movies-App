@@ -10,9 +10,9 @@ const propTypes = {
 };
 class Card extends React.PureComponent {
     render() {
-        const  {item} = this.props;
+        const  {navigation, item} = this.props;
         return (
-            <TouchableOpacity style={styles.container}>
+            <TouchableOpacity onPress={() => navigation.navigate('Detail', { movieDetail: item })} style={styles.container}>
                 <Image 
                     resizeMode='cover'
                     style={styles.image}
@@ -30,6 +30,7 @@ class Card extends React.PureComponent {
 
 const styles = StyleSheet.create({
     container: {
+        color: 'black',
         padding: 5,
         position: 'relative',
         alignItems: 'center',
@@ -45,6 +46,7 @@ const styles = StyleSheet.create({
         width: 100,
         top: 10,
         textAlign: 'center',
+        color: 'black',
     }
 })
 

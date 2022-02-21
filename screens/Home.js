@@ -7,7 +7,7 @@ import Error from '../components/Error';
 
 
 const dimensions = Dimensions.get('screen');
-const Home = () => {
+const Home = ({ navigation }) => {
     const [moviesImg, setMoviesImg] = useState();
     const [popularMovies, setPopularMovies] = useState();
     const [popularTv, setPopularTv] = useState();
@@ -64,25 +64,25 @@ const Home = () => {
 
             {popularMovies && (
                 <View style={styles.carousel}>
-                <List content={popularMovies} title="Popular Movies" />
+                <List navigation={navigation} content={popularMovies} title="Popular Movies" />
             </View>
             )}
 
             {popularTv && (
                 <View style={styles.carousel}>
-                <List content={popularTv} title="Popular TV Shows" />
+                <List navigation={navigation} content={popularTv} title="Popular TV Shows" />
             </View>
             )}
 
             {familyMovies && (
                 <View style={styles.carousel}>
-                <List content={familyMovies} title="Family Movies" />
+                <List navigation={navigation} content={familyMovies} title="Family Movies" />
             </View>
             )}
 
             {documentry && (
                 <View style={styles.carousel}>
-                <List content={documentry} title="Documentary" />
+                <List navigation={navigation} content={documentry} title="Documentary" />
             </View>                
             )}
 
